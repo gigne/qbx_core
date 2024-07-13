@@ -3,6 +3,7 @@ local positionConfig = require 'config.shared'.notifyPosition
 local logger = require 'modules.logger'
 local loggingConfig = require 'config.server'.logging
 local storage = require 'server.storage.main'
+local identifier = GetConvar('qbx:identifier', 'license2')
 
 -- Getters
 -- Get your player first and then trigger a function on them
@@ -307,7 +308,7 @@ exports('GetPermission', GetPermission)
 ---@param source Source
 ---@return boolean
 function IsOptin(source)
-    local license = GetPlayerIdentifierByType(source --[[@as string]], 'license2') or GetPlayerIdentifierByType(source --[[@as string]], 'license')
+    local license = GetPlayerIdentifierByType(source --[[@as string]], identifier) or GetPlayerIdentifierByType(source --[[@as string]], 'license')
     if not license or not IsPlayerAceAllowed(source --[[@as string]], 'admin') then return false end
     local player = GetPlayer(source)
     return player.PlayerData.optin
@@ -318,7 +319,7 @@ exports('IsOptin', IsOptin)
 ---Opt in or out of admin reports
 ---@param source Source
 function ToggleOptin(source)
-    local license = GetPlayerIdentifierByType(source --[[@as string]], 'license2') or GetPlayerIdentifierByType(source --[[@as string]], 'license')
+    local license = GetPlayerIdentifierByType(source --[[@as string]], identifier) or GetPlayerIdentifierByType(source --[[@as string]], 'license')
     if not license or not IsPlayerAceAllowed(source --[[@as string]], 'admin') then return end
     local player = GetPlayer(source)
     player.PlayerData.optin = not player.PlayerData.optin
@@ -332,7 +333,7 @@ exports('ToggleOptin', ToggleOptin)
 ---@return boolean
 ---@return string? playerMessage
 function IsPlayerBanned(source)
-    local plicense = GetPlayerIdentifierByType(source --[[@as string]], 'license2') or GetPlayerIdentifierByType(source --[[@as string]], 'license')
+    local plicense = GetPlayerIdentifierByType(source --[[@as string]], identifier) or GetPlayerIdentifierByType(source --[[@as string]], 'license')
     local result = storage.fetchBan({
         license = plicense
     })
@@ -401,7 +402,7 @@ local function ExploitBan(playerId, origin)
     CreateThread(function()
         local success, errorResult = storage.insertBan({
             name = name,
-            license = GetPlayerIdentifierByType(playerId --[[@as string]], 'license2') or GetPlayerIdentifierByType(playerId --[[@as string]], 'license'),
+            license = GetPlayerIdentifierByType(playerId --[[@as string]], identifier) or GetPlayerIdentifierByType(playerId --[[@as string]], 'license'),
             discordId = GetPlayerIdentifierByType(playerId --[[@as string]], 'discord'),
             ip = GetPlayerIdentifierByType(playerId --[[@as string]], 'ip'),
             reason = origin,

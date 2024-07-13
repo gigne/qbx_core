@@ -1,6 +1,7 @@
 require 'server.functions'
 require 'bridge.qb.server.player'
 local functions = {}
+local identifier = GetConvar('qbx:identifier', 'license2')
 
 local createQbExport = require 'bridge.qb.shared.export-function'
 
@@ -101,7 +102,7 @@ functions.IsLicenseInUse = function(license)
     local players = GetPlayers()
 
     for _, player in pairs(players) do
-        local plyLicense2 = GetPlayerIdentifierByType(player --[[@as string]], 'license2')
+        local plyLicense2 = GetPlayerIdentifierByType(player --[[@as string]], identifier)
         local plyLicense = GetPlayerIdentifierByType(player --[[@as string]], 'license')
         if plyLicense2 == license or plyLicense == license then
             return true

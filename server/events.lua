@@ -7,6 +7,7 @@ local queue = require 'server.queue'
 -- Event Handler
 
 local usedLicenses = {}
+local identifier = GetConvar('qbx:identifier', 'license2')
 
 ---@param message string
 AddEventHandler('chatMessage', function(_, _, message)
@@ -18,7 +19,7 @@ end)
 
 AddEventHandler('playerJoining', function()
     local src = source --[[@as string]]
-    local license = GetPlayerIdentifierByType(src, 'license2') or GetPlayerIdentifierByType(src, 'license')
+    local license = GetPlayerIdentifierByType(src, identifier) or GetPlayerIdentifierByType(src, 'license')
     if not license then return end
     if queue then
         queue.removePlayerJoining(license)
@@ -35,7 +36,7 @@ end)
 ---@param reason string
 AddEventHandler('playerDropped', function(reason)
     local src = source --[[@as string]]
-    local license = GetPlayerIdentifierByType(src, 'license2') or GetPlayerIdentifierByType(src, 'license')
+    local license = GetPlayerIdentifierByType(src, identifier) or GetPlayerIdentifierByType(src, 'license')
     if license then usedLicenses[license] = nil end
     if not QBX.Players[src] then return end
     GlobalState.PlayerCount -= 1
@@ -65,7 +66,7 @@ end)
 ---@param deferrals Deferrals
 local function onPlayerConnecting(name, _, deferrals)
     local src = source --[[@as string]]
-    local license = GetPlayerIdentifierByType(src, 'license2') or GetPlayerIdentifierByType(src, 'license')
+    local license = GetPlayerIdentifierByType(src, identifier) or GetPlayerIdentifierByType(src, 'license')
     deferrals.defer()
 
     -- Mandatory wait

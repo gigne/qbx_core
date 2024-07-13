@@ -2,6 +2,7 @@ local config = require 'config.server'
 local logger = require 'modules.logger'
 local storage = require 'server.storage.main'
 local starterItems = require 'config.shared'.starterItems
+local identifier = GetConvar('qbx:identifier', 'license2')
 
 ---@param license2 string
 ---@param license? string
@@ -26,7 +27,7 @@ local function giveStarterItems(source)
 end
 
 lib.callback.register('qbx_core:server:getCharacters', function(source)
-    local license2, license = GetPlayerIdentifierByType(source, 'license2'), GetPlayerIdentifierByType(source, 'license')
+    local license2, license = GetPlayerIdentifierByType(source, identifier), GetPlayerIdentifierByType(source, 'license')
     local chars = storage.fetchAllPlayerEntities(license2, license)
     local allowedAmount = getAllowedAmountOfCharacters(license2, license)
     local sortedChars = {}
@@ -54,7 +55,7 @@ lib.callback.register('qbx_core:server:loadCharacter', function(source, citizenI
         webhook = config.logging.webhook['joinleave'],
         event = 'Loaded',
         color = 'green',
-        message = ('**%s** (%s |  ||%s|| | %s | %s | %s) loaded'):format(GetPlayerName(source), GetPlayerIdentifierByType(source, 'discord') or 'undefined', GetPlayerIdentifierByType(source, 'ip') or 'undefined', GetPlayerIdentifierByType(source, 'license2') or GetPlayerIdentifierByType(source, 'license') or 'undefined', citizenId, source)
+        message = ('**%s** (%s |  ||%s|| | %s | %s | %s) loaded'):format(GetPlayerName(source), GetPlayerIdentifierByType(source, 'discord') or 'undefined', GetPlayerIdentifierByType(source, 'ip') or 'undefined', GetPlayerIdentifierByType(source, identifier) or GetPlayerIdentifierByType(source, 'license') or 'undefined', citizenId, source)
     })
     lib.print.info(('%s (Citizen ID: %s) has successfully loaded!'):format(GetPlayerName(source), citizenId))
 end)

@@ -2,6 +2,7 @@ lib.print.warn('This resource is still using the deprecated qbx_core utils!')
 lib.print.warn('If you are the author, please update to use the new lib module. If you are not, please tell them to update!')
 
 local isServer = IsDuplicityVersion()
+local identifier = GetConvar('qbx:identifier', 'license2')
 
 -- import lib without exposing it globally
 local oldqbx = qbx
@@ -201,7 +202,7 @@ if isServer then
         local players = GetPlayers()
 
         for _, player in pairs(players) do
-            local plyLicense2 = GetPlayerIdentifierByType(player --[[@as string]], 'license2')
+            local plyLicense2 = GetPlayerIdentifierByType(player --[[@as string]], identifier)
             local plyLicense = GetPlayerIdentifierByType(player --[[@as string]], 'license')
             if plyLicense2 == license or plyLicense == license then
                 return true

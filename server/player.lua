@@ -6,6 +6,7 @@ local maxJobsPerPlayer = GetConvarInt('qbx:max_jobs_per_player', 1)
 local maxGangsPerPlayer = GetConvarInt('qbx:max_gangs_per_player', 1)
 local setJobReplaces = GetConvar('qbx:setjob_replaces', 'true') == 'true'
 local setGangReplaces = GetConvar('qbx:setgang_replaces', 'true') == 'true'
+local identifier = GetConvar('qbx:identifier', 'license2')
 
 ---@class PlayerData : PlayerEntity
 ---@field jobs table<string, integer>
@@ -24,7 +25,7 @@ function Login(source, citizenid, newData)
     end
 
     if citizenid then
-        local license, license2 = GetPlayerIdentifierByType(source --[[@as string]], 'license'), GetPlayerIdentifierByType(source --[[@as string]], 'license2')
+        local license, license2 = GetPlayerIdentifierByType(source --[[@as string]], 'license'), GetPlayerIdentifierByType(source --[[@as string]], identifier)
         local playerData = storage.fetchPlayerEntity(citizenid)
         if playerData and (license2 == playerData.license or license == playerData.license) then
             return not not CheckPlayerData(source, playerData)
@@ -423,7 +424,7 @@ function CheckPlayerData(source, playerData)
     local Offline = true
     if source then
         playerData.source = source
-        playerData.license = playerData.license or GetPlayerIdentifierByType(source --[[@as string]], 'license2') or GetPlayerIdentifierByType(source --[[@as string]], 'license')
+        playerData.license = playerData.license or GetPlayerIdentifierByType(source --[[@as string]], identifier) or GetPlayerIdentifierByType(source --[[@as string]], 'license')
         playerData.name = GetPlayerName(source)
         Offline = false
     end
@@ -989,7 +990,7 @@ exports('SaveOffline', SaveOffline)
 ---@param source Source
 ---@param citizenid string
 function DeleteCharacter(source, citizenid)
-    local license, license2 = GetPlayerIdentifierByType(source --[[@as string]], 'license'), GetPlayerIdentifierByType(source --[[@as string]], 'license2')
+    local license, license2 = GetPlayerIdentifierByType(source --[[@as string]], 'license'), GetPlayerIdentifierByType(source --[[@as string]], identifier)
     local result = storage.fetchPlayerEntity(citizenid).license
     if license == result or license2 == result then
         CreateThread(function()
